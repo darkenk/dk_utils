@@ -1,0 +1,11 @@
+Library which contains some common stuff which I use in my projects
+
+How to use:
+
+1. git clone https://github.com/darkenk/dk_utils
+2. cd dk_utils
+3. mkdir build
+4. cd build
+5. cmake ..
+6. cmake --build .
+7. ctest -VV
