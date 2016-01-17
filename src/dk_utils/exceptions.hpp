@@ -1,17 +1,12 @@
 #ifndef EXCEPTIONS_H_
 #define EXCEPTIONS_H_
 
-#include <exception>
-#include <string>
+#include <stdexcept>
 
-class Exception : public std::exception
+template <typename T> class Exception : public std::logic_error
 {
 public:
-    Exception(const std::string& msg) noexcept;
-    virtual const char* what() const noexcept;
-
-private:
-    std::string mMessage;
+    Exception(const std::string& msg) : std::logic_error(msg) {}
 };
 
 #endif /* EXCEPTIONS_H_ */

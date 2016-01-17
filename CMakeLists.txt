@@ -13,6 +13,14 @@ if (NOT CMAKE_VERBOSE_MAKEFILE)
 endif()
 
 include(cmake/CMakeLists.txt)
+find_package(ECM 1.0.0 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
+
+find_package(EGL)
+if (EGL_FOUND)
+    set(ENABLE_DK_OPENGL "true")
+endif()
+
 
 option(ENABLE_TESTS "enable tests" ON)
 if (ENABLE_TESTS)
