@@ -1,10 +1,10 @@
 #ifndef EGLWRAPPER_HPP
 #define EGLWRAPPER_HPP
 
-#include "../dk_utils/exceptions.hpp"
-#include "../dk_utils/noncopyable.hpp"
 #include <EGL/egl.h>
 #include <mutex>
+#include "../dk_utils/exceptions.hpp"
+#include "../dk_utils/noncopyable.hpp"
 
 class EGLWrapper : NonCopyable
 {

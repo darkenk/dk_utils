@@ -1,5 +1,5 @@
-#include "exceptions.hpp"
 #include <gtest/gtest.h>
+#include "exceptions.hpp"
 
 TEST(test_exception, correct_message) {
     class T
