@@ -21,19 +21,23 @@ ExternalProject_Add(googletest
                      ${GTEST_LIB_DIR}/libgtest_main.a
 )
 
-set(GTEST_FOUND 1 PARENT_SCOPE)
-set(GMOCK_FOUND 1 PARENT_SCOPE)
+set(GTEST_FOUND 1 CACHE STRING "GTEST_FOUND")
+set(GMOCK_FOUND 1 CACHE STRING "GMOCK_FOUND")
+#set(GTEST_FOUND 1 PARENT_SCOPE)
+#set(GMOCK_FOUND 1 PARENT_SCOPE)
 
 # Specify include dir
 ExternalProject_Get_Property(googletest source_dir)
-set(GTEST_INCLUDE_DIRS ${source_dir}/googletest/include PARENT_SCOPE)
-set(GMOCK_INCLUDE_DIRS ${source_dir}/googlemock/include PARENT_SCOPE)
+#set(GTEST_INCLUDE_DIRS ${source_dir}/googletest/include PARENT_SCOPE)
+set(GTEST_INCLUDE_DIRS ${source_dir}/googletest/include CACHE STRING "GTEST path")
+#set(GMOCK_INCLUDE_DIRS ${source_dir}/googlemock/include PARENT_SCOPE)
+set(GMOCK_INCLUDE_DIRS ${source_dir}/googlemock/include CACHE STRING "GMOCK path")
 
 macro(dk_add_lib variable_name library_name library_path)
     add_library(${library_name} STATIC IMPORTED GLOBAL)
     set_target_properties(${library_name} PROPERTIES IMPORTED_LOCATION ${library_path})
     add_dependencies(${library_name} googletest)
-    set(${variable_name} ${library_name} PARENT_SCOPE)
+    set(${variable_name} ${library_name} CACHE STRING "${library_name}")
 endmacro()
 
 dk_add_lib(GMOCK_LIBRARY gmock ${GMOCK_LIB_DIR}/libgmock.a)

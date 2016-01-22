@@ -84,7 +84,7 @@ void EGLWrapper::init(EGLNativeDisplayType display, EGLNativeWindowType window,
                       const EGLint configAttribs[], EGLContext shareContext) {
     lock_guard<mutex> l(sMutexInit);
     EGLint numConfigs = 0;
-    EGLConfig config = 0;
+    EGLConfig config = nullptr;
     EGLint noOfRequestedConfigs = 1;
     if (not eglBindAPI(EGL_OPENGL_ES_API)) {
         throwError("Cannot bind to GLES API");

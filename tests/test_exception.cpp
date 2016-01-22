@@ -10,4 +10,4 @@ TEST(test_exception, correct_message) {
     } catch (Exception<T>& e) {
         EXPECT_STREQ(msg.c_str(), e.what());
     }
-};
+}

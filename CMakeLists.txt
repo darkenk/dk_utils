@@ -21,7 +21,6 @@ if (EGL_FOUND)
     set(ENABLE_DK_OPENGL "true")
 endif()
 
-
 option(ENABLE_TESTS "enable tests" ON)
 if (ENABLE_TESTS)
     add_subdirectory(ext/gtest)
