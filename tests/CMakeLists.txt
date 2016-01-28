@@ -4,6 +4,7 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/ToolsGtest.txt)
 
 add_gtest(test_exception "test_exception.cpp;${SRC}/exceptions.cpp" ${SRC} "")
 add_gtest(test_logger "test_logger.cpp;${SRC}/logger.cpp" ${SRC} "")
+add_gtest(test_observer "test_observer.cpp;${SRC}/observer.cpp" ${SRC} "")
 
 if (ENABLE_DK_OPENGL)
     set(SRC "${CMAKE_CURRENT_SOURCE_DIR}/../src/dk_opengl")
