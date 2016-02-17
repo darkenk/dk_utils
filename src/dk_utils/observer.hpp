@@ -3,49 +3,72 @@
 
 #include <algorithm>
 #include <memory>
+#include <map>
 #include <vector>
+#include <functional>
+#include <utility>
 #include "noncopyable.hpp"
 
 template<typename T>
 class ObserverSubject;
 
-template<typename T>
-class Observer : NonCopyable
+template<typename E>
+class ObserverEvent
 {
 public:
-    virtual ~Observer() = default;
-    virtual void notify(ObserverSubject<T>& object) = 0;
+    virtual ~ObserverEvent() {}
+    E getType() {
+        return mType;
+    }
+
+protected:
+    E mType;
 };
 
-template<typename T>
+template<typename Event>
 class ObserverSubject : NonCopyable
 {
 public:
-    using ObserverPtr = std::shared_ptr<Observer<T>>;
+    using Token = unsigned int;
+    using ObserverFn = std::function<void(ObserverEvent<Event>&)>;
     virtual ~ObserverSubject() = default;
 
-    void notify() {
-        for (auto o : mObservers) {
-            o->notify(*this);
+    void notify(ObserverEvent<Event>& oe) {
+        auto& vec = mObservers[oe.getType()];
+        auto size = vec.size();
+        auto it = std::begin(vec);
+        while (it != std::end(vec)) {
+            it->fn(oe);
+            if (size == vec.size()) {
+                it++;
+            }
         }
     }
 
-    void registerObserver(ObserverPtr observer) {
-        if (mObservers.end() == std::find(mObservers.begin(), mObservers.end(), observer)) {
-            mObservers.push_back(observer);
-        }
+    Token registerObserver(const Event& event, ObserverFn&& observer) {
+        static Token t = 0;
+        t++;
+        mObservers[event].push_back(TokenFunction(t, std::forward<ObserverFn>(observer)));
+        return t;
     }
 
-    void unregisterObserver(const ObserverPtr& observer) {
-        mObservers.erase(std::remove_if(mObservers.begin(), mObservers.end(),
-                                        [observer](ObserverPtr& o) {
-                                            return observer.get() == o.get();
-                                        }),
-                         mObservers.end());
+    void unregisterObserver(Token token) {
+        for (auto& it : mObservers) {
+            auto& vec = it.second;
+            vec.erase(std::remove_if(std::begin(vec), std::end(vec),
+                                     [token](TokenFunction& tf) { return token == tf.token; }),
+                             std::end(vec));
+        }
     }
 
 private:
-    std::vector<ObserverPtr> mObservers;
+    struct TokenFunction {
+        TokenFunction(Token t, ObserverFn f) : token(t), fn(f) {}
+        Token token;
+        ObserverFn fn;
+    };
+    std::map<Event, std::vector<TokenFunction>> mObservers;
+
 };
 
 #endif  // OBSERVER_HPP

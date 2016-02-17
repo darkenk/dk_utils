@@ -4,39 +4,72 @@
 
 using namespace std;
 using testing::Ref;
+using testing::Invoke;
 
-class Mock {};
-
-class MockObserver : public Observer<Mock>
-{
-public:
-    MOCK_METHOD1(notify, void(ObserverSubject<Mock>& object));
+enum TestEvents {
+    DUMMY,
+    UNREGISTER
 };
 
-TEST(Observer, simple_register) {
-    auto observer = make_shared<MockObserver>();
-    ObserverSubject<Mock> os;
-    os.registerObserver(observer);
-    EXPECT_CALL(*observer, notify(Ref(os)));
-    os.notify();
+using OE = ObserverEvent<TestEvents>;
+using OS = ObserverSubject<TestEvents>;
+
+class DummyEvent : public OE
+{
+public:
+    DummyEvent() {
+        mType = TestEvents::DUMMY;
+    }
+};
+
+class UnregisterEvent : public OE
+{
+public:
+    UnregisterEvent(OS& os, OS::Token t): token(t), subject(os) {
+        mType = TestEvents::UNREGISTER;
+    }
+    OS::Token token;
+    OS& subject;
+};
+
+class MockObserver
+{
+public:
+    MOCK_METHOD1(notify, void(OE&));
+};
+
+void unregisterWhileNotify(OE& evt) {
+    UnregisterEvent& ue = dynamic_cast<UnregisterEvent&>(evt);
+    ue.subject.unregisterObserver(ue.token);
 }
 
-TEST(Observer, prohibit_double_register) {
-    auto observer = make_shared<MockObserver>();
-    ObserverSubject<Mock> os;
-    os.registerObserver(observer);
-    os.registerObserver(observer);
-    EXPECT_CALL(*observer, notify(Ref(os))).Times(1);
-    os.notify();
+TEST(Observer, simple_register) {
+    OS os;
+    MockObserver mo;
+    os.registerObserver(TestEvents::DUMMY, std::bind(&MockObserver::notify, &mo, std::placeholders::_1));
+    DummyEvent evt;
+    EXPECT_CALL(mo, notify(Ref(evt)));
+    os.notify(evt);
 }
 
 TEST(Observer, unregister) {
-    auto observer = make_shared<MockObserver>();
-    ObserverSubject<Mock> os;
-    os.registerObserver(observer);
-    EXPECT_CALL(*observer, notify(Ref(os))).Times(1);
-    os.notify();
-    os.unregisterObserver(observer);
-    EXPECT_CALL(*observer, notify(Ref(os))).Times(0);
-    os.notify();
+    OS os;
+    MockObserver mo;
+    auto fn = std::bind(&MockObserver::notify, &mo, std::placeholders::_1);
+    auto t = os.registerObserver(TestEvents::DUMMY, fn);
+    DummyEvent evt;
+    EXPECT_CALL(mo, notify(Ref(evt))).Times(1);
+    os.notify(evt);
+    os.unregisterObserver(t);
+    EXPECT_CALL(mo, notify(Ref(evt))).Times(0);
+    os.notify(evt);
+}
+
+TEST(Observer, unregister_while_notify)
+{
+    OS os;
+    MockObserver mo;
+    auto t = os.registerObserver(TestEvents::UNREGISTER, unregisterWhileNotify);
+    UnregisterEvent ue(os, t);
+    EXPECT_NO_FATAL_FAILURE(os.notify(ue));
 }
