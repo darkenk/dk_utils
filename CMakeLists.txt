@@ -21,6 +21,11 @@ if (EGL_FOUND)
     set(ENABLE_DK_OPENGL "true")
 endif()
 
+find_package(XCB)
+if (XCB_FOUND)
+    set(ENABLE_X11 "true")
+endif()
+
 option(ENABLE_TESTS "enable tests" ON)
 if (ENABLE_TESTS)
     add_subdirectory(ext/gtest)

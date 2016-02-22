@@ -12,3 +12,7 @@ if (ENABLE_DK_OPENGL)
     set(LINK ${EGL_LIBRARIES})
     add_gtest(test_eglwrapper "test_eglwrapper.cpp;${SRC}/eglwrapper.cpp" "${INC}" ${LINK})
 endif()
+
+if (ENABLE_DK_X11)
+
+endif()
