@@ -14,5 +14,8 @@ if (ENABLE_DK_OPENGL)
 endif()
 
 if (ENABLE_DK_X11)
-
+    set(SRC "${CMAKE_CURRENT_SOURCE_DIR}/../src/dk_opengl")
+    set(INC ${SRC} ${XCB_INCLUDE_DIRS})
+    set(LINK "${XCB_LIBRARIES}")
+    add_gtest(test_windowx11 "test_windowx11.cpp;${SRC}/windowx11.cpp" "${INC}" "${LINK}")
 endif()

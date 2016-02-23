@@ -21,9 +21,9 @@ if (EGL_FOUND)
     set(ENABLE_DK_OPENGL "true")
 endif()
 
-find_package(XCB)
+find_package(XCB COMPONENTS ICCCM)
 if (XCB_FOUND)
-    set(ENABLE_X11 "true")
+    set(ENABLE_DK_X11 "true")
 endif()
 
 option(ENABLE_TESTS "enable tests" ON)
