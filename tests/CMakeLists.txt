@@ -1,6 +1,6 @@
 set(SRC "${CMAKE_CURRENT_SOURCE_DIR}/../src/dk_utils")
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/ToolsGtest.txt)
+include(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/gtest_tools.cmake)
 
 add_gtest(test_exception "test_exception.cpp;${SRC}/exceptions.cpp" ${SRC} "")
 add_gtest(test_logger "test_logger.cpp;${SRC}/logger.cpp" ${SRC} "")
