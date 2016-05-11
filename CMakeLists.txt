@@ -15,9 +15,13 @@ endif()
 
 include(cmake/compiler_flags.cmake)
 find_package(ECM 1.0.0 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/;${ECM_MODULE_PATH};\
+    ${CMAKE_MODULE_PATH}")
+
+message(${CMAKE_MODULE_PATH})
 
 find_package(EGL)
+find_package(OpenGLES2)
 if (EGL_FOUND)
     set(ENABLE_DK_OPENGL "true")
 endif()

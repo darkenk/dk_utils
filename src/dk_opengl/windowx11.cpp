@@ -1,5 +1,4 @@
 #include "windowx11.hpp"
-#include <unistd.h>
 #include <xcb/xcb_atom.h>
 #include <xcb/xcb_icccm.h>
 #include "../dk_utils/logger.hpp"
@@ -94,23 +93,15 @@ EGLNativeWindowType WindowX11::getWindow() {
     return mWindow;
 }
 
-void WindowX11::run() {
-    initialize();
+bool WindowX11::processEvents() {
     mRunning = true;
-    while (mRunning) {
-        auto event = xcb_poll_for_event(mConnection);
-        if (event) {
-            auto fn = mEventHandler[event->response_type & ~0x80];
-            if (fn != nullptr) {
-                fn(event);
-            }
-            free(event);
+    auto event = xcb_poll_for_event(mConnection);
+    if (event) {
+        auto fn = mEventHandler[event->response_type & ~0x80];
+        if (fn != nullptr) {
+            fn(event);
         }
-        redraw();
+        free(event);
     }
-    deinitialize();
-}
-
-void WindowX11::redraw() {
-    usleep(500);
+    return mRunning;
 }

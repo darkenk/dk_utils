@@ -18,12 +18,7 @@ public:
     virtual EGLNativeDisplayType getDisplay();
     virtual EGLNativeWindowType getWindow();
 
-    virtual void run();
-
-protected:
-    virtual void initialize() {}
-    virtual void redraw();
-    virtual void deinitialize() {}
+    virtual bool processEvents();
 
 private:
     unsigned short mWidth;
