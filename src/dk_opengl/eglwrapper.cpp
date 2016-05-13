@@ -39,13 +39,13 @@ const EGLint EGLWrapper::sSurfaceAttribs[] = {
 int EGLWrapper::sInstances = 0;
 mutex EGLWrapper::sMutexInit;
 
-EGLWrapper::EGLWrapper(EGLNativeDisplayType display, EGLNativeWindowType window,
+EGLWrapper::EGLWrapper(EGLNativeDisplayType dsp, EGLNativeWindowType window,
                        const EGLint configAttribs[], EGLContext shareContext)
     : mDisplay(EGL_NO_DISPLAY), mContext(EGL_NO_CONTEXT), mSurface(EGL_NO_SURFACE) {
     if (configAttribs == nullptr) {
         configAttribs = sConfigAttribs;
     }
-    init(display, window, configAttribs, shareContext);
+    init(dsp, window, configAttribs, shareContext);
 }
 
 EGLWrapper::~EGLWrapper() {
@@ -80,7 +80,7 @@ void EGLWrapper::throwError(const string &message) {
     throw EGLException("Error: " + oss.str() + ". " + message);
 }
 
-void EGLWrapper::init(EGLNativeDisplayType display, EGLNativeWindowType window,
+void EGLWrapper::init(EGLNativeDisplayType dsp, EGLNativeWindowType window,
                       const EGLint configAttribs[], EGLContext shareContext) {
     lock_guard<mutex> l(sMutexInit);
     EGLint numConfigs = 0;
@@ -89,7 +89,7 @@ void EGLWrapper::init(EGLNativeDisplayType display, EGLNativeWindowType window,
     if (not eglBindAPI(EGL_OPENGL_ES_API)) {
         throwError("Cannot bind to GLES API");
     }
-    mDisplay = eglGetDisplay(display);
+    mDisplay = eglGetDisplay(dsp);
     if (mDisplay == EGL_NO_DISPLAY) {
         throwError("EGL_NO_DISPLAY");
     }
@@ -105,7 +105,7 @@ void EGLWrapper::init(EGLNativeDisplayType display, EGLNativeWindowType window,
     if (mContext == EGL_NO_CONTEXT) {
         throwError("Can't create context");
     }
-    if (window != 0) {
+    if (window != nullptr) {
         mSurface = eglCreateWindowSurface(mDisplay, config, window, sSurfaceAttribs);
         if (mSurface == EGL_NO_SURFACE) {
             throwError("Can't create surface");

@@ -1,0 +1,5 @@
+find_path(GBM_INCLUDE_DIRS NAMES gbm/gbm.h)
+find_library(GBM_LIBRARIES NAMES gbm)
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(GBM DEFAULT_MSG GBM_INCLUDE_DIRS GBM_LIBRARIES)
+mark_as_advanced(GBM_INCLUDE_DIRS GBM_LIBRARIES)

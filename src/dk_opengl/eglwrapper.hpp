@@ -9,7 +9,7 @@
 class EGLWrapper : NonCopyable
 {
 public:
-    EGLWrapper(EGLNativeDisplayType display, EGLNativeWindowType window,
+    EGLWrapper(EGLNativeDisplayType dsp, EGLNativeWindowType window,
                const EGLint configAttribs[] = nullptr, EGLContext shareContext = EGL_NO_CONTEXT);
     ~EGLWrapper();
     void swap();
@@ -30,8 +30,8 @@ private:
     EGLSurface mSurface;
 
     [[noreturn]] void throwError(const std::string& message);
-    void init(EGLNativeDisplayType display, EGLNativeWindowType window,
-              const EGLint configAttribs[], EGLContext shareContext);
+    void init(EGLNativeDisplayType dsp, EGLNativeWindowType window, const EGLint configAttribs[],
+              EGLContext shareContext);
     void deinit();
 };
 
