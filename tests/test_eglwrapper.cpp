@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "eglwrapper.hpp"
+#include "dk_opengl/eglwrapper.hpp"
 
 TEST(test_eglwrapper, initialization) {
     {

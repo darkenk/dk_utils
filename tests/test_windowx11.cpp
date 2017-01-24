@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "windowx11.hpp"
-#include "eglwrapper.hpp"
+#include "dk_opengl/windowx11.hpp"
+#include "dk_opengl/eglwrapper.hpp"
 #include <GLES2/gl2.h>
 
 TEST(test_windowx11, initialization) {

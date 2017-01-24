@@ -1,6 +1,6 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include "dk_utils/observer.hpp"
+#include "observer.hpp"
 
 using namespace std;
 using testing::Ref;

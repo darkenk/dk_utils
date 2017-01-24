@@ -105,7 +105,7 @@ void EGLWrapper::init(EGLNativeDisplayType dsp, EGLNativeWindowType window,
     if (mContext == EGL_NO_CONTEXT) {
         throwError("Can't create context");
     }
-    if (window != nullptr) {
+    if (window != 0) {
         mSurface = eglCreateWindowSurface(mDisplay, config, window, sSurfaceAttribs);
         if (mSurface == EGL_NO_SURFACE) {
             throwError("Can't create surface");
