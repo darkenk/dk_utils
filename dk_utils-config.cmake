@@ -8,6 +8,7 @@ if (NOT dk_utils_FOUND)
                                       ${upper_lib}_LIBRARIES ${upper_lib}_INCLUDE_DIRS)
     mark_as_advanced(${upper_lib}_INCLUDE_DIRS ${upper_lib}_LIBRARIES)
     if (NOT TARGET ${lib})
+        set(ENABLE_TESTS OFF CACHE BOOL "Disable dk_utils tests" FORCE)
         add_subdirectory(${CMAKE_CURRENT_LIST_DIR} ${CMAKE_BINARY_DIR}/${lib})
     endif()
     set(CMAKE_MODULE_PATH
