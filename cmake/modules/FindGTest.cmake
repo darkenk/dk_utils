@@ -45,7 +45,15 @@ dk_add_lib(GTEST_MAIN_LIBRARY gtest_main ${GTEST_LIB_DIR}/libgtest_main.a)
 
 find_package(Threads REQUIRED)
 
-function(add_gtest name sources inc libs)
+function(add_gtest name sources)
+    set(libs "")
+    set(inc "")
+    if (ARGV2)
+        set(libs ${ARGV2})
+    endif()
+    if (ARGV3)
+        set(inc ${ARGV3})
+    endif()
     add_executable(${name} ${sources})
     add_dependencies(${name} googletest)
     target_link_libraries(${name}
@@ -55,7 +63,8 @@ function(add_gtest name sources inc libs)
         ${CMAKE_THREAD_LIBS_INIT}
     )
     add_test(AllTests ${name})
-    target_include_directories(${name} PRIVATE ${inc})
+    target_include_directories(${name} PRIVATE ${inc}
+        SYSTEM ${GTEST_INCLUDE_DIRS} ${GMOCK_INCLUDE_DIRS})
 endfunction()
 
 endif()
