@@ -13,12 +13,13 @@ if (NOT CMAKE_VERBOSE_MAKEFILE)
     set(CMAKE_VERBOSE_MAKEFILE ON CACHE STRING "Enable compile verbose mode by default" FORCE)
 endif()
 
-include(cmake/compiler_flags.cmake)
 find_package(ECM 1.0.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
     ${CMAKE_CURRENT_LIST_DIR}/cmake/modules/
+    ${CMAKE_CURRENT_LIST_DIR}/cmake/tools/
     ${ECM_MODULE_PATH}
 )
+include(dk_compiler_flags)
 
 find_package(EGL)
 find_package(GLESv2)

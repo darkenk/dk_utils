@@ -13,6 +13,7 @@ if (NOT dk_utils_FOUND)
     endif()
     set(CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/cmake/modules
+        ${CMAKE_CURRENT_LIST_DIR}/cmake/tools
         ${CMAKE_MODULE_PATH}
     )
 endif()
